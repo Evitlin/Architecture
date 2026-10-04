@@ -1,4 +1,6 @@
+using ArchitectureCatalog.API.DTOs.ArchitecturalStyles;
 using ArchitectureCatalog.API.DTOs.Buildings;
+using ArchitectureCatalog.API.DTOs.Comments;
 using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Entities;
 using ArchitectureCatalog.API.Repositories;
@@ -43,6 +45,43 @@ public class BuildingService : IBuildingService
     {
         var building = await _buildingRepository.GetByIdAsync(id);
         return building is null ? null : MapToDto(building);
+    }
+
+    public async Task<BuildingDetailsDto?> GetDetailsAsync(int id)
+    {
+        var building = await _buildingRepository.GetByIdAsync(id);
+        if (building is null)
+        {
+            return null;
+        }
+
+        var style = await _styleRepository.GetByIdAsync(building.ArchitecturalStyleId);
+        if (style is null)
+        {
+            return null;
+        }
+
+        var comments = await _commentRepository.GetByBuildingIdAsync(id);
+
+        return new BuildingDetailsDto
+        {
+            Building = MapToDto(building),
+            ArchitecturalStyle = new ArchitecturalStyleDto
+            {
+                Id = style.Id,
+                Name = style.Name,
+                Description = style.Description,
+                StartYear = style.StartYear,
+                EndYear = style.EndYear
+            },
+            Comments = comments.Select(comment => new CommentDto
+            {
+                Id = comment.Id,
+                Content = comment.Content,
+                CreatedAt = comment.CreatedAt,
+                BuildingId = comment.BuildingId
+            }).ToList()
+        };
     }
 
     public async Task<BuildingDto?> CreateAsync(CreateBuildingDto dto)

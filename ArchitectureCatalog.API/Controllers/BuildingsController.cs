@@ -39,6 +39,18 @@ public class BuildingsController : ControllerBase
         return Ok(building);
     }
 
+    [HttpGet("{id:int}/details")]
+    public async Task<ActionResult<BuildingDetailsDto>> GetDetails(int id)
+    {
+        var details = await _service.GetDetailsAsync(id);
+        if (details is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(details);
+    }
+
     [HttpPost]
     public async Task<ActionResult<BuildingDto>> Create([FromBody] CreateBuildingDto dto)
     {

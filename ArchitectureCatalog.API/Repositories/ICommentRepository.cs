@@ -8,6 +8,7 @@ public interface ICommentRepository
         int page,
         int pageSize,
         int? buildingId);
+    Task<IReadOnlyList<Comment>> GetByBuildingIdAsync(int buildingId);
     Task<Comment?> GetByIdAsync(int id);
     Task<Comment> CreateAsync(Comment comment);
     Task<bool> UpdateAsync(Comment comment);

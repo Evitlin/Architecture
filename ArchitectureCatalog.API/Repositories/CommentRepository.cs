@@ -52,6 +52,24 @@ public class CommentRepository : ICommentRepository
         return (items, totalItems);
     }
 
+    public async Task<IReadOnlyList<Comment>> GetByBuildingIdAsync(int buildingId)
+    {
+        const string sql = """
+            SELECT
+                id AS Id,
+                content AS Content,
+                created_at AS CreatedAt,
+                building_id AS BuildingId
+            FROM comments
+            WHERE building_id = @BuildingId
+            ORDER BY id
+            """;
+
+        await EnsureOpenAsync();
+        var items = await _connection.QueryAsync<Comment>(sql, new { BuildingId = buildingId });
+        return items.ToList();
+    }
+
     public async Task<Comment?> GetByIdAsync(int id)
     {
         const string sql = """
