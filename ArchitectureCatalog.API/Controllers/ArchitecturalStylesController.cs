@@ -1,5 +1,6 @@
 using ArchitectureCatalog.API.DTOs.ArchitecturalStyles;
 using ArchitectureCatalog.API.DTOs.Common;
+using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.ArchitecturalStyles;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,20 @@ public class ArchitecturalStylesController : ControllerBase
         [FromQuery] int pageSize = 10)
     {
         var result = await _service.GetAllAsync(page, pageSize);
+
+        foreach (var item in result.Items)
+        {
+            item.Links = HateoasLinks.ForArchitecturalStyle(Url, item.Id);
+        }
+
+        result.Links = HateoasLinks.ForPagedCollection(
+            Url,
+            nameof(GetAll),
+            "ArchitecturalStyles",
+            result.Page,
+            result.PageSize,
+            result.TotalPages);
+
         return Ok(result);
     }
 
@@ -34,6 +49,7 @@ public class ArchitecturalStylesController : ControllerBase
             return NotFound();
         }
 
+        style.Links = HateoasLinks.ForArchitecturalStyle(Url, style.Id);
         return Ok(style);
     }
 
@@ -46,6 +62,7 @@ public class ArchitecturalStylesController : ControllerBase
         }
 
         var created = await _service.CreateAsync(dto);
+        created.Links = HateoasLinks.ForArchitecturalStyle(Url, created.Id);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 

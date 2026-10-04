@@ -10,4 +10,5 @@ public class BuildingDto
     public string? Architect { get; set; }
     public int YearBuilt { get; set; }
     public int ArchitecturalStyleId { get; set; }
+    public List<Common.LinkDto> Links { get; set; } = [];
 }

@@ -9,13 +9,16 @@ public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
     private readonly IBuildingRepository _buildingRepository;
+    private readonly IArchitecturalStyleRepository _styleRepository;
 
     public CommentService(
         ICommentRepository commentRepository,
-        IBuildingRepository buildingRepository)
+        IBuildingRepository buildingRepository,
+        IArchitecturalStyleRepository styleRepository)
     {
         _commentRepository = commentRepository;
         _buildingRepository = buildingRepository;
+        _styleRepository = styleRepository;
     }
 
     public async Task<PagedResult<CommentDto>> GetAllAsync(int page, int pageSize, int? buildingId)
@@ -26,6 +29,24 @@ public class CommentService : ICommentService
         var dtos = items.Select(MapToDto).ToList();
 
         return PagedResult<CommentDto>.Create(dtos, page, pageSize, totalItems);
+    }
+
+    public async Task<IReadOnlyList<CommentDto>?> GetByStyleAndBuildingAsync(int styleId, int buildingId)
+    {
+        var style = await _styleRepository.GetByIdAsync(styleId);
+        if (style is null)
+        {
+            return null;
+        }
+
+        var building = await _buildingRepository.GetByIdAsync(buildingId);
+        if (building is null || building.ArchitecturalStyleId != styleId)
+        {
+            return null;
+        }
+
+        var comments = await _commentRepository.GetByBuildingIdAsync(buildingId);
+        return comments.Select(MapToDto).ToList();
     }
 
     public async Task<CommentDto?> GetByIdAsync(int id)

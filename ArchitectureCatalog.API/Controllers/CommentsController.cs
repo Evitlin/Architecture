@@ -1,5 +1,6 @@
 using ArchitectureCatalog.API.DTOs.Comments;
 using ArchitectureCatalog.API.DTOs.Common;
+using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.Comments;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,21 @@ public class CommentsController : ControllerBase
         [FromQuery] int? buildingId = null)
     {
         var result = await _service.GetAllAsync(page, pageSize, buildingId);
+
+        foreach (var item in result.Items)
+        {
+            item.Links = HateoasLinks.ForComment(Url, item.Id, item.BuildingId);
+        }
+
+        result.Links = HateoasLinks.ForPagedCollection(
+            Url,
+            nameof(GetAll),
+            "Comments",
+            result.Page,
+            result.PageSize,
+            result.TotalPages,
+            new { buildingId });
+
         return Ok(result);
     }
 
@@ -35,6 +51,7 @@ public class CommentsController : ControllerBase
             return NotFound();
         }
 
+        comment.Links = HateoasLinks.ForComment(Url, comment.Id, comment.BuildingId);
         return Ok(comment);
     }
 
@@ -52,6 +69,7 @@ public class CommentsController : ControllerBase
             return NotFound();
         }
 
+        created.Links = HateoasLinks.ForComment(Url, created.Id, created.BuildingId);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 

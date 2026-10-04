@@ -11,6 +11,7 @@ public class PagedResult<T>
     public int PageSize { get; set; }
     public int TotalItems { get; set; }
     public int TotalPages { get; set; }
+    public List<LinkDto> Links { get; set; } = [];
 
     public static (int Page, int PageSize) Normalize(int page, int pageSize)
     {

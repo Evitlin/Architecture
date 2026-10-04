@@ -7,4 +7,5 @@ public class ArchitecturalStyleDto
     public string Description { get; set; } = null!;
     public int StartYear { get; set; }
     public int EndYear { get; set; }
+    public List<Common.LinkDto> Links { get; set; } = [];
 }

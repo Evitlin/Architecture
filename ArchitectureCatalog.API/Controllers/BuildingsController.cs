@@ -1,5 +1,6 @@
 using ArchitectureCatalog.API.DTOs.Buildings;
 using ArchitectureCatalog.API.DTOs.Common;
+using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.Buildings;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,21 @@ public class BuildingsController : ControllerBase
         [FromQuery] int? architecturalStyleId = null)
     {
         var result = await _service.GetAllAsync(page, pageSize, city, architecturalStyleId);
+
+        foreach (var item in result.Items)
+        {
+            item.Links = HateoasLinks.ForBuilding(Url, item.Id, item.ArchitecturalStyleId);
+        }
+
+        result.Links = HateoasLinks.ForPagedCollection(
+            Url,
+            nameof(GetAll),
+            "Buildings",
+            result.Page,
+            result.PageSize,
+            result.TotalPages,
+            new { city, architecturalStyleId });
+
         return Ok(result);
     }
 
@@ -36,6 +52,7 @@ public class BuildingsController : ControllerBase
             return NotFound();
         }
 
+        building.Links = HateoasLinks.ForBuilding(Url, building.Id, building.ArchitecturalStyleId);
         return Ok(building);
     }
 
@@ -47,6 +64,24 @@ public class BuildingsController : ControllerBase
         {
             return NotFound();
         }
+
+        details.Building.Links = HateoasLinks.ForBuilding(
+            Url,
+            details.Building.Id,
+            details.Building.ArchitecturalStyleId);
+        details.ArchitecturalStyle.Links = HateoasLinks.ForArchitecturalStyle(
+            Url,
+            details.ArchitecturalStyle.Id);
+
+        foreach (var comment in details.Comments)
+        {
+            comment.Links = HateoasLinks.ForComment(Url, comment.Id, comment.BuildingId);
+        }
+
+        details.Links = HateoasLinks.ForBuildingDetails(
+            Url,
+            details.Building.Id,
+            details.ArchitecturalStyle.Id);
 
         return Ok(details);
     }
@@ -65,6 +100,7 @@ public class BuildingsController : ControllerBase
             return NotFound();
         }
 
+        created.Links = HateoasLinks.ForBuilding(Url, created.Id, created.ArchitecturalStyleId);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
