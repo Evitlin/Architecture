@@ -1,4 +1,5 @@
 using ArchitectureCatalog.API.DTOs.ArchitecturalStyles;
+using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Entities;
 using ArchitectureCatalog.API.Repositories;
 
@@ -17,10 +18,14 @@ public class ArchitecturalStyleService : IArchitecturalStyleService
         _buildingRepository = buildingRepository;
     }
 
-    public async Task<IEnumerable<ArchitecturalStyleDto>> GetAllAsync()
+    public async Task<PagedResult<ArchitecturalStyleDto>> GetAllAsync(int page, int pageSize)
     {
-        var styles = await _styleRepository.GetAllAsync();
-        return styles.Select(MapToDto);
+        (page, pageSize) = PagedResult<ArchitecturalStyleDto>.Normalize(page, pageSize);
+
+        var (items, totalItems) = await _styleRepository.GetPagedAsync(page, pageSize);
+        var dtos = items.Select(MapToDto).ToList();
+
+        return PagedResult<ArchitecturalStyleDto>.Create(dtos, page, pageSize, totalItems);
     }
 
     public async Task<ArchitecturalStyleDto?> GetByIdAsync(int id)

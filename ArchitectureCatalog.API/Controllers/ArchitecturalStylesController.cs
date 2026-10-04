@@ -1,4 +1,5 @@
 using ArchitectureCatalog.API.DTOs.ArchitecturalStyles;
+using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Services.ArchitecturalStyles;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,12 @@ public class ArchitecturalStylesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ArchitecturalStyleDto>>> GetAll()
+    public async Task<ActionResult<PagedResult<ArchitecturalStyleDto>>> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var styles = await _service.GetAllAsync();
-        return Ok(styles);
+        var result = await _service.GetAllAsync(page, pageSize);
+        return Ok(result);
     }
 
     [HttpGet("{id:int}")]

@@ -1,4 +1,5 @@
 using ArchitectureCatalog.API.DTOs.Comments;
+using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Services.Comments;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,13 @@ public class CommentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CommentDto>>> GetAll()
+    public async Task<ActionResult<PagedResult<CommentDto>>> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] int? buildingId = null)
     {
-        var comments = await _service.GetAllAsync();
-        return Ok(comments);
+        var result = await _service.GetAllAsync(page, pageSize, buildingId);
+        return Ok(result);
     }
 
     [HttpGet("{id:int}")]

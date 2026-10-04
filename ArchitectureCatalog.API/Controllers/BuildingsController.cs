@@ -1,4 +1,5 @@
 using ArchitectureCatalog.API.DTOs.Buildings;
+using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Services.Buildings;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,14 @@ public class BuildingsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<BuildingDto>>> GetAll()
+    public async Task<ActionResult<PagedResult<BuildingDto>>> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? city = null,
+        [FromQuery] int? architecturalStyleId = null)
     {
-        var buildings = await _service.GetAllAsync();
-        return Ok(buildings);
+        var result = await _service.GetAllAsync(page, pageSize, city, architecturalStyleId);
+        return Ok(result);
     }
 
     [HttpGet("{id:int}")]

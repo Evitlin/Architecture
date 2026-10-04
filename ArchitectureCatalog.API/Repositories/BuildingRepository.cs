@@ -1,3 +1,4 @@
+using System.Text;
 using ArchitectureCatalog.API.Entities;
 using Dapper;
 using MySqlConnector;
@@ -13,9 +14,30 @@ public class BuildingRepository : IBuildingRepository
         _connection = connection;
     }
 
-    public async Task<IEnumerable<Building>> GetAllAsync()
+    public async Task<(IReadOnlyList<Building> Items, int TotalItems)> GetPagedAsync(
+        int page,
+        int pageSize,
+        string? city,
+        int? architecturalStyleId)
     {
-        const string sql = """
+        var where = new StringBuilder();
+        var parameters = new DynamicParameters();
+
+        if (!string.IsNullOrWhiteSpace(city))
+        {
+            where.Append(" WHERE city = @City");
+            parameters.Add("City", city);
+        }
+
+        if (architecturalStyleId.HasValue)
+        {
+            where.Append(where.Length == 0 ? " WHERE " : " AND ");
+            where.Append("architectural_style_id = @ArchitecturalStyleId");
+            parameters.Add("ArchitecturalStyleId", architecturalStyleId.Value);
+        }
+
+        var countSql = $"SELECT COUNT(*) FROM buildings{where}";
+        var dataSql = $"""
             SELECT
                 id AS Id,
                 name AS Name,
@@ -26,10 +48,20 @@ public class BuildingRepository : IBuildingRepository
                 year_built AS YearBuilt,
                 architectural_style_id AS ArchitecturalStyleId
             FROM buildings
+            {where}
+            ORDER BY id
+            LIMIT @PageSize OFFSET @Offset
             """;
 
+        parameters.Add("PageSize", pageSize);
+        parameters.Add("Offset", (page - 1) * pageSize);
+
         await EnsureOpenAsync();
-        return await _connection.QueryAsync<Building>(sql);
+
+        var totalItems = await _connection.ExecuteScalarAsync<int>(countSql, parameters);
+        var items = (await _connection.QueryAsync<Building>(dataSql, parameters)).ToList();
+
+        return (items, totalItems);
     }
 
     public async Task<Building?> GetByIdAsync(int id)

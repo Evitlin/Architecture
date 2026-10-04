@@ -4,7 +4,11 @@ namespace ArchitectureCatalog.API.Repositories;
 
 public interface IBuildingRepository
 {
-    Task<IEnumerable<Building>> GetAllAsync();
+    Task<(IReadOnlyList<Building> Items, int TotalItems)> GetPagedAsync(
+        int page,
+        int pageSize,
+        string? city,
+        int? architecturalStyleId);
     Task<Building?> GetByIdAsync(int id);
     Task<Building> CreateAsync(Building building);
     Task<bool> UpdateAsync(Building building);

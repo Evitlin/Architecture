@@ -4,7 +4,7 @@ namespace ArchitectureCatalog.API.Repositories;
 
 public interface IArchitecturalStyleRepository
 {
-    Task<IEnumerable<ArchitecturalStyle>> GetAllAsync();
+    Task<(IReadOnlyList<ArchitecturalStyle> Items, int TotalItems)> GetPagedAsync(int page, int pageSize);
     Task<ArchitecturalStyle?> GetByIdAsync(int id);
     Task<ArchitecturalStyle> CreateAsync(ArchitecturalStyle style);
     Task<bool> UpdateAsync(ArchitecturalStyle style);

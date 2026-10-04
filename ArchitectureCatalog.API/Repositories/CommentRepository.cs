@@ -1,3 +1,4 @@
+using System.Text;
 using ArchitectureCatalog.API.Entities;
 using Dapper;
 using MySqlConnector;
@@ -13,19 +14,42 @@ public class CommentRepository : ICommentRepository
         _connection = connection;
     }
 
-    public async Task<IEnumerable<Comment>> GetAllAsync()
+    public async Task<(IReadOnlyList<Comment> Items, int TotalItems)> GetPagedAsync(
+        int page,
+        int pageSize,
+        int? buildingId)
     {
-        const string sql = """
+        var where = new StringBuilder();
+        var parameters = new DynamicParameters();
+
+        if (buildingId.HasValue)
+        {
+            where.Append(" WHERE building_id = @BuildingId");
+            parameters.Add("BuildingId", buildingId.Value);
+        }
+
+        var countSql = $"SELECT COUNT(*) FROM comments{where}";
+        var dataSql = $"""
             SELECT
                 id AS Id,
                 content AS Content,
                 created_at AS CreatedAt,
                 building_id AS BuildingId
             FROM comments
+            {where}
+            ORDER BY id
+            LIMIT @PageSize OFFSET @Offset
             """;
 
+        parameters.Add("PageSize", pageSize);
+        parameters.Add("Offset", (page - 1) * pageSize);
+
         await EnsureOpenAsync();
-        return await _connection.QueryAsync<Comment>(sql);
+
+        var totalItems = await _connection.ExecuteScalarAsync<int>(countSql, parameters);
+        var items = (await _connection.QueryAsync<Comment>(dataSql, parameters)).ToList();
+
+        return (items, totalItems);
     }
 
     public async Task<Comment?> GetByIdAsync(int id)

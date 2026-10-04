@@ -13,9 +13,11 @@ public class ArchitecturalStyleRepository : IArchitecturalStyleRepository
         _connection = connection;
     }
 
-    public async Task<IEnumerable<ArchitecturalStyle>> GetAllAsync()
+    public async Task<(IReadOnlyList<ArchitecturalStyle> Items, int TotalItems)> GetPagedAsync(int page, int pageSize)
     {
-        const string sql = """
+        const string countSql = "SELECT COUNT(*) FROM architectural_styles";
+
+        const string dataSql = """
             SELECT
                 id AS Id,
                 name AS Name,
@@ -23,10 +25,18 @@ public class ArchitecturalStyleRepository : IArchitecturalStyleRepository
                 start_year AS StartYear,
                 end_year AS EndYear
             FROM architectural_styles
+            ORDER BY id
+            LIMIT @PageSize OFFSET @Offset
             """;
 
         await EnsureOpenAsync();
-        return await _connection.QueryAsync<ArchitecturalStyle>(sql);
+
+        var totalItems = await _connection.ExecuteScalarAsync<int>(countSql);
+        var items = (await _connection.QueryAsync<ArchitecturalStyle>(
+            dataSql,
+            new { PageSize = pageSize, Offset = (page - 1) * pageSize })).ToList();
+
+        return (items, totalItems);
     }
 
     public async Task<ArchitecturalStyle?> GetByIdAsync(int id)

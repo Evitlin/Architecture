@@ -1,4 +1,5 @@
 using ArchitectureCatalog.API.DTOs.Buildings;
+using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Entities;
 using ArchitectureCatalog.API.Repositories;
 
@@ -20,10 +21,22 @@ public class BuildingService : IBuildingService
         _commentRepository = commentRepository;
     }
 
-    public async Task<IEnumerable<BuildingDto>> GetAllAsync()
+    public async Task<PagedResult<BuildingDto>> GetAllAsync(
+        int page,
+        int pageSize,
+        string? city,
+        int? architecturalStyleId)
     {
-        var buildings = await _buildingRepository.GetAllAsync();
-        return buildings.Select(MapToDto);
+        (page, pageSize) = PagedResult<BuildingDto>.Normalize(page, pageSize);
+
+        var (items, totalItems) = await _buildingRepository.GetPagedAsync(
+            page,
+            pageSize,
+            city,
+            architecturalStyleId);
+
+        var dtos = items.Select(MapToDto).ToList();
+        return PagedResult<BuildingDto>.Create(dtos, page, pageSize, totalItems);
     }
 
     public async Task<BuildingDto?> GetByIdAsync(int id)

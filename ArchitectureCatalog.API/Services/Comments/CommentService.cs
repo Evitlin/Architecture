@@ -1,4 +1,5 @@
 using ArchitectureCatalog.API.DTOs.Comments;
+using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Entities;
 using ArchitectureCatalog.API.Repositories;
 
@@ -17,10 +18,14 @@ public class CommentService : ICommentService
         _buildingRepository = buildingRepository;
     }
 
-    public async Task<IEnumerable<CommentDto>> GetAllAsync()
+    public async Task<PagedResult<CommentDto>> GetAllAsync(int page, int pageSize, int? buildingId)
     {
-        var comments = await _commentRepository.GetAllAsync();
-        return comments.Select(MapToDto);
+        (page, pageSize) = PagedResult<CommentDto>.Normalize(page, pageSize);
+
+        var (items, totalItems) = await _commentRepository.GetPagedAsync(page, pageSize, buildingId);
+        var dtos = items.Select(MapToDto).ToList();
+
+        return PagedResult<CommentDto>.Create(dtos, page, pageSize, totalItems);
     }
 
     public async Task<CommentDto?> GetByIdAsync(int id)

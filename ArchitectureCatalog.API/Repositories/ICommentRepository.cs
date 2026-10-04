@@ -4,7 +4,10 @@ namespace ArchitectureCatalog.API.Repositories;
 
 public interface ICommentRepository
 {
-    Task<IEnumerable<Comment>> GetAllAsync();
+    Task<(IReadOnlyList<Comment> Items, int TotalItems)> GetPagedAsync(
+        int page,
+        int pageSize,
+        int? buildingId);
     Task<Comment?> GetByIdAsync(int id);
     Task<Comment> CreateAsync(Comment comment);
     Task<bool> UpdateAsync(Comment comment);

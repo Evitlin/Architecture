@@ -1,10 +1,11 @@
 using ArchitectureCatalog.API.DTOs.Buildings;
+using ArchitectureCatalog.API.DTOs.Common;
 
 namespace ArchitectureCatalog.API.Services.Buildings;
 
 public interface IBuildingService
 {
-    Task<IEnumerable<BuildingDto>> GetAllAsync();
+    Task<PagedResult<BuildingDto>> GetAllAsync(int page, int pageSize, string? city, int? architecturalStyleId);
     Task<BuildingDto?> GetByIdAsync(int id);
     Task<BuildingDto?> CreateAsync(CreateBuildingDto dto);
     Task<bool> UpdateAsync(int id, UpdateBuildingDto dto);
