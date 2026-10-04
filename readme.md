@@ -16,6 +16,6 @@ Sistemoje numatyti trys naudotojų tipai ir jų funkcijos:
 
 **Back-End:** C# .NET REST API (sluoksninė architektūra)
 
-**Duomenų bazė:** MySQL (Entity Framework Core)
+**Duomenų bazė:** MySQL (Dapper + Liquibase)
 
 **Front-End:** React
