@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="002-seed-data" author="evigai">
+        <!-- Architectural styles (10) -->
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Gothic"/>
+            <column name="description" value="Medieval style with pointed arches, ribbed vaults, and flying buttresses."/>
+            <column name="start_year" valueNumeric="1140"/>
+            <column name="end_year" valueNumeric="1500"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Renaissance"/>
+            <column name="description" value="Revival of classical Roman forms with symmetry, proportion, and geometric clarity."/>
+            <column name="start_year" valueNumeric="1400"/>
+            <column name="end_year" valueNumeric="1600"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Baroque"/>
+            <column name="description" value="Dramatic, ornate style with curves, grandeur, and strong light-shadow contrast."/>
+            <column name="start_year" valueNumeric="1600"/>
+            <column name="end_year" valueNumeric="1750"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Neoclassicism"/>
+            <column name="description" value="Return to Greco-Roman ideals: columns, pediments, and restrained decoration."/>
+            <column name="start_year" valueNumeric="1750"/>
+            <column name="end_year" valueNumeric="1850"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="Historicism"/>
+            <column name="description" value="19th-century approach that freely mixes earlier historical styles."/>
+            <column name="start_year" valueNumeric="1830"/>
+            <column name="end_year" valueNumeric="1900"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="Art Nouveau"/>
+            <column name="description" value="Organic curves, floral motifs, and craftsmanship typical of the fin de siècle."/>
+            <column name="start_year" valueNumeric="1890"/>
+            <column name="end_year" valueNumeric="1914"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="Modernism"/>
+            <column name="description" value="Functional forms, little ornament, new materials such as steel, glass, and concrete."/>
+            <column name="start_year" valueNumeric="1918"/>
+            <column name="end_year" valueNumeric="1970"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="Brutalism"/>
+            <column name="description" value="Raw concrete (béton brut), monumental massing, and honest structural expression."/>
+            <column name="start_year" valueNumeric="1950"/>
+            <column name="end_year" valueNumeric="1980"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="Postmodernism"/>
+            <column name="description" value="Playful references to history, color, and irony as a reaction to strict modernism."/>
+            <column name="start_year" valueNumeric="1970"/>
+            <column name="end_year" valueNumeric="1995"/>
+        </insert>
+        <insert tableName="architectural_styles">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="Contemporary"/>
+            <column name="description" value="Present-day architecture focusing on sustainability, technology, and context."/>
+            <column name="start_year" valueNumeric="1995"/>
+            <column name="end_year" valueNumeric="2100"/>
+        </insert>
+
+        <!-- Buildings: 5 per style (50 total). IDs 1-5 Gothic, 6-10 Renaissance, ... -->
+
+        <!-- Gothic (style 1) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Church of St. Anne"/>
+            <column name="address" value="Maironio g. 8"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Brick Gothic masterpiece known for its intricate facade."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1500"/>
+            <column name="architectural_style_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="St. Johns Church"/>
+            <column name="address" value="Šv. Jono g. 12"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Gothic parish church later reshaped with baroque towers."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1426"/>
+            <column name="architectural_style_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Trakai Island Castle"/>
+            <column name="address" value="Karaimų g. 43C"/>
+            <column name="city" value="Trakai"/>
+            <column name="description" value="Gothic brick castle on an island in Lake Galvė."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1409"/>
+            <column name="architectural_style_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Kaunas Castle"/>
+            <column name="address" value="Pilies g. 17"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Medieval Gothic castle ruins near the Neris and Nemunas confluence."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1361"/>
+            <column name="architectural_style_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="Vytautas the Great Church"/>
+            <column name="address" value="Aleksoto g. 3"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Gothic brick church on the bank of the Nemunas."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1400"/>
+            <column name="architectural_style_id" valueNumeric="1"/>
+        </insert>
+
+        <!-- Renaissance (style 2) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="Palace of the Grand Dukes"/>
+            <column name="address" value="Katedros a. 4"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Reconstructed Renaissance residence of Lithuanian rulers."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="2009"/>
+            <column name="architectural_style_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="Radvila Palace"/>
+            <column name="address" value="Vilniaus g. 22"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Renaissance palace complex associated with the Radvila family."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1632"/>
+            <column name="architectural_style_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="House of Perkūnas"/>
+            <column name="address" value="Aleksoto g. 6"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Late Gothic / early Renaissance merchant house near the old town."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1500"/>
+            <column name="architectural_style_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="Sapieha Palace"/>
+            <column name="address" value="Antakalnio g. 17"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Noble residence with Renaissance planning later enriched in baroque taste."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1689"/>
+            <column name="architectural_style_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="Biržai Castle"/>
+            <column name="address" value="J. Radvilos g. 3"/>
+            <column name="city" value="Biržai"/>
+            <column name="description" value="Bastion castle reflecting Renaissance fortification ideas."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1589"/>
+            <column name="architectural_style_id" valueNumeric="2"/>
+        </insert>
+
+        <!-- Baroque (style 3) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="11"/>
+            <column name="name" value="Pažaislis Monastery"/>
+            <column name="address" value="T. Masiulio g. 31"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Baroque monastery ensemble on the shore of Kaunas Reservoir."/>
+            <column name="architect" value="Giovanni Battista Frediani"/>
+            <column name="year_built" valueNumeric="1712"/>
+            <column name="architectural_style_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="12"/>
+            <column name="name" value="Church of St. Peter and St. Paul"/>
+            <column name="address" value="Antakalnio g. 1"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Baroque church famous for its elaborate stucco interior."/>
+            <column name="architect" value="Giovanni Battista Frediani"/>
+            <column name="year_built" valueNumeric="1701"/>
+            <column name="architectural_style_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="13"/>
+            <column name="name" value="Church of St. Casimir"/>
+            <column name="address" value="Didžioji g. 34"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Early baroque church with a distinctive crown-topped dome."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1618"/>
+            <column name="architectural_style_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="14"/>
+            <column name="name" value="Slushko Palace"/>
+            <column name="address" value="T. Kosciuškos g. 10"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Baroque riverside palace near the Neris."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1700"/>
+            <column name="architectural_style_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="15"/>
+            <column name="name" value="Tytuvėnai Monastery"/>
+            <column name="address" value="Maironio g. 2"/>
+            <column name="city" value="Tytuvėnai"/>
+            <column name="description" value="Baroque monastery and pilgrimage complex in Samogitia."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1633"/>
+            <column name="architectural_style_id" valueNumeric="3"/>
+        </insert>
+
+        <!-- Neoclassicism (style 4) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="16"/>
+            <column name="name" value="Vilnius Cathedral Basilica"/>
+            <column name="address" value="Katedros a. 1"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Main Catholic cathedral of Lithuania with a neoclassical facade."/>
+            <column name="architect" value="Laurynas Gucevičius"/>
+            <column name="year_built" valueNumeric="1783"/>
+            <column name="architectural_style_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="17"/>
+            <column name="name" value="Vilnius Town Hall"/>
+            <column name="address" value="Didžioji g. 31"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Neoclassical town hall rebuilt by Laurynas Gucevičius."/>
+            <column name="architect" value="Laurynas Gucevičius"/>
+            <column name="year_built" valueNumeric="1799"/>
+            <column name="architectural_style_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="18"/>
+            <column name="name" value="Verkiai Palace"/>
+            <column name="address" value="Žaliųjų ežerų g. 49"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Neoclassical estate overlooking the Neris valley."/>
+            <column name="architect" value="Laurynas Gucevičius"/>
+            <column name="year_built" valueNumeric="1786"/>
+            <column name="architectural_style_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="19"/>
+            <column name="name" value="Presidential Palace"/>
+            <column name="address" value="S. Daukanto a. 3"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Neoclassical palace used as the official presidential residence."/>
+            <column name="architect" value="Vasily Stasov"/>
+            <column name="year_built" valueNumeric="1834"/>
+            <column name="architectural_style_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="20"/>
+            <column name="name" value="Kaunas City Hall"/>
+            <column name="address" value="Rotušės a. 15"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="White neoclassical city hall, often called the White Swan."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1792"/>
+            <column name="architectural_style_id" valueNumeric="4"/>
+        </insert>
+
+        <!-- Historicism (style 5) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="21"/>
+            <column name="name" value="Vytautas the Great War Museum"/>
+            <column name="address" value="K. Donelaičio g. 64"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Historicist museum complex with a distinctive tower and garden."/>
+            <column name="architect" value="Vladimiras Dubeneckis"/>
+            <column name="year_built" valueNumeric="1936"/>
+            <column name="architectural_style_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="22"/>
+            <column name="name" value="Klaipėda Drama Theatre"/>
+            <column name="address" value="Teatro g. 2"/>
+            <column name="city" value="Klaipėda"/>
+            <column name="description" value="Historic theatre building in the old town of Klaipėda."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1893"/>
+            <column name="architectural_style_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="23"/>
+            <column name="name" value="Lithuanian National Opera and Ballet Theatre"/>
+            <column name="address" value="A. Vienuolio g. 1"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Large historicist cultural venue near the Neris."/>
+            <column name="architect" value="Elena Nijolė Bučiūtė"/>
+            <column name="year_built" valueNumeric="1974"/>
+            <column name="architectural_style_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="24"/>
+            <column name="name" value="Šiauliai Cathedral"/>
+            <column name="address" value="Aušros al. 3"/>
+            <column name="city" value="Šiauliai"/>
+            <column name="description" value="Neo-Gothic / historicist cathedral dominating the city skyline."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1957"/>
+            <column name="architectural_style_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="25"/>
+            <column name="name" value="Palanga Manor"/>
+            <column name="address" value="Vytauto g. 15"/>
+            <column name="city" value="Palanga"/>
+            <column name="description" value="Tiškevičiai manor in historicist style, now Amber Museum."/>
+            <column name="architect" value="Franz Schwechten"/>
+            <column name="year_built" valueNumeric="1897"/>
+            <column name="architectural_style_id" valueNumeric="5"/>
+        </insert>
+
+        <!-- Art Nouveau (style 6) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="26"/>
+            <column name="name" value="Hotel Europa Royale"/>
+            <column name="address" value="Mišto g. 7"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Early 20th-century building with Art Nouveau details in Kaunas centre."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1912"/>
+            <column name="architectural_style_id" valueNumeric="6"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="27"/>
+            <column name="name" value="Vienybė Square Ensembles"/>
+            <column name="address" value="Vienybės a."/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Early 20th-century streetscape with Art Nouveau and eclectic facades."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1910"/>
+            <column name="architectural_style_id" valueNumeric="6"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="28"/>
+            <column name="name" value="Juozas Tumas-Vaižgantas House"/>
+            <column name="address" value="Aleksoto g. 10"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Residential building with Art Nouveau ornament near the old town."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1914"/>
+            <column name="architectural_style_id" valueNumeric="6"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="29"/>
+            <column name="name" value="Vilnius Art Nouveau Tenement"/>
+            <column name="address" value="Gedimino pr. 22"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Apartment house showing floral Art Nouveau facade motifs."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1908"/>
+            <column name="architectural_style_id" valueNumeric="6"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="30"/>
+            <column name="name" value="Klaipėda Seamen House"/>
+            <column name="address" value="Danės g. 19"/>
+            <column name="city" value="Klaipėda"/>
+            <column name="description" value="Coastal city building with early 20th-century decorative detailing."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1911"/>
+            <column name="architectural_style_id" valueNumeric="6"/>
+        </insert>
+
+        <!-- Modernism (style 7) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="31"/>
+            <column name="name" value="Kaunas Central Post Office"/>
+            <column name="address" value="Laisvės al. 102"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Interwar modernist landmark on Laisvės Avenue."/>
+            <column name="architect" value="Feliksas Vizbaras"/>
+            <column name="year_built" valueNumeric="1932"/>
+            <column name="architectural_style_id" valueNumeric="7"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="32"/>
+            <column name="name" value="Romuva Cinema"/>
+            <column name="address" value="Laisvės al. 54"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Art Deco / modernist cinema building from the interwar period."/>
+            <column name="architect" value="Nikolajus Mačiulskis"/>
+            <column name="year_built" valueNumeric="1940"/>
+            <column name="architectural_style_id" valueNumeric="7"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="33"/>
+            <column name="name" value="Church of the Resurrection"/>
+            <column name="address" value="Žemaičių g. 31A"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Monumental white modernist church on the Žaliakalnis hill."/>
+            <column name="architect" value="Karolis Reisonas"/>
+            <column name="year_built" valueNumeric="1940"/>
+            <column name="architectural_style_id" valueNumeric="7"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="34"/>
+            <column name="name" value="Officers Club Palace"/>
+            <column name="address" value="A. Mickevičiaus g. 19"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Interwar modernist public building for military officers."/>
+            <column name="architect" value="Vladimiras Dubeneckis"/>
+            <column name="year_built" valueNumeric="1937"/>
+            <column name="architectural_style_id" valueNumeric="7"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="35"/>
+            <column name="name" value="Pienocentras Building"/>
+            <column name="address" value="Laisvės al. 55"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Functional modernist office block from the temporary capital years."/>
+            <column name="architect" value="Vytautas Landsbergis-Žemkalnis"/>
+            <column name="year_built" valueNumeric="1932"/>
+            <column name="architectural_style_id" valueNumeric="7"/>
+        </insert>
+
+        <!-- Brutalism (style 8) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="36"/>
+            <column name="name" value="Vilnius Palace of Concerts and Sports"/>
+            <column name="address" value="Rinktinės g. 1"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Large concrete arena often cited as a local brutalist landmark."/>
+            <column name="architect" value="Eduardas Chlomauskas"/>
+            <column name="year_built" valueNumeric="1971"/>
+            <column name="architectural_style_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="37"/>
+            <column name="name" value="Lithuanian National Library"/>
+            <column name="address" value="Gedimino pr. 51"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Monumental late modernist / brutalist national library building."/>
+            <column name="architect" value="Viktoras Anikin"/>
+            <column name="year_built" valueNumeric="1963"/>
+            <column name="architectural_style_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="38"/>
+            <column name="name" value="Kaunas Ninth Fort Museum"/>
+            <column name="address" value="Žemaičių pl. 73"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Concrete memorial architecture with strong brutalist expression."/>
+            <column name="architect" value="Gediminas Baravykas"/>
+            <column name="year_built" valueNumeric="1984"/>
+            <column name="architectural_style_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="39"/>
+            <column name="name" value="Vilnius University Library Extension"/>
+            <column name="address" value="Universiteto g. 3"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Concrete volumes contrasting with the historic university courtyard."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1970"/>
+            <column name="architectural_style_id" valueNumeric="8"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="40"/>
+            <column name="name" value="Solar System Residential Block"/>
+            <column name="address" value="Sąjūdžio a. 1"/>
+            <column name="city" value="Šiauliai"/>
+            <column name="description" value="Typical late-Soviet prefabricated housing with raw concrete finishes."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1978"/>
+            <column name="architectural_style_id" valueNumeric="8"/>
+        </insert>
+
+        <!-- Postmodernism (style 9) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="41"/>
+            <column name="name" value="Europa Tower Plaza Ensemble"/>
+            <column name="address" value="Konstitucijos pr. 7"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Late 20th-century commercial towers with postmodern massing cues."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="2004"/>
+            <column name="architectural_style_id" valueNumeric="9"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="42"/>
+            <column name="name" value="Vilnius City Municipality"/>
+            <column name="address" value="Konstitucijos pr. 3"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Municipal complex reflecting post-Soviet urban postmodern aesthetics."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="2004"/>
+            <column name="architectural_style_id" valueNumeric="9"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="43"/>
+            <column name="name" value="Akropolis Kaunas"/>
+            <column name="address" value="Karaliaus Mindaugo pr. 49"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Large retail complex typical of early postmodern commercial design."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="2007"/>
+            <column name="architectural_style_id" valueNumeric="9"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="44"/>
+            <column name="name" value="Forum Palace"/>
+            <column name="address" value="Konstitucijos pr. 26"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Business and entertainment centre with playful late-century forms."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="2003"/>
+            <column name="architectural_style_id" valueNumeric="9"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="45"/>
+            <column name="name" value="Klaipėda Business Centre"/>
+            <column name="address" value="Taikos pr. 52"/>
+            <column name="city" value="Klaipėda"/>
+            <column name="description" value="Office building illustrating transitional postmodern commercial style."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="1998"/>
+            <column name="architectural_style_id" valueNumeric="9"/>
+        </insert>
+
+        <!-- Contemporary (style 10) -->
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="46"/>
+            <column name="name" value="MO Museum"/>
+            <column name="address" value="Pylimo g. 17"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Contemporary museum of modern Lithuanian art."/>
+            <column name="architect" value="Daniel Libeskind"/>
+            <column name="year_built" valueNumeric="2018"/>
+            <column name="architectural_style_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="47"/>
+            <column name="name" value="National Art Gallery"/>
+            <column name="address" value="Konstitucijos pr. 22"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Contemporary gallery space for 20th- and 21st-century art."/>
+            <column name="architect" value="Audrius Bučas"/>
+            <column name="year_built" valueNumeric="2009"/>
+            <column name="architectural_style_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="48"/>
+            <column name="name" value="Science and Innovation Centre Mokslo sala"/>
+            <column name="address" value="Karaliaus Mindaugo pr. 50"/>
+            <column name="city" value="Kaunas"/>
+            <column name="description" value="Contemporary science centre on Nemunas Island."/>
+            <column name="architect" value="SMAR Architecture Studio"/>
+            <column name="year_built" valueNumeric="2023"/>
+            <column name="architectural_style_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="49"/>
+            <column name="name" value="Klaipėda University Marine Research Hub"/>
+            <column name="address" value="H. Manto g. 84"/>
+            <column name="city" value="Klaipėda"/>
+            <column name="description" value="Recent campus building oriented toward research and glass facades."/>
+            <column name="architect" valueComputed="NULL"/>
+            <column name="year_built" valueNumeric="2019"/>
+            <column name="architectural_style_id" valueNumeric="10"/>
+        </insert>
+        <insert tableName="buildings">
+            <column name="id" valueNumeric="50"/>
+            <column name="name" value="Swedbank Headquarters"/>
+            <column name="address" value="Konstitucijos pr. 20A"/>
+            <column name="city" value="Vilnius"/>
+            <column name="description" value="Glass office tower representing contemporary commercial architecture."/>
+            <column name="architect" value="Audrius Ambrasas"/>
+            <column name="year_built" valueNumeric="2009"/>
+            <column name="architectural_style_id" valueNumeric="10"/>
+        </insert>
+
+        <!-- Comments: 0-2 per building. Some buildings left without comments. -->
+        <insert tableName="comments">
+            <column name="id" valueNumeric="1"/>
+            <column name="content" value="Brick details on the facade are incredible up close."/>
+            <column name="created_at" valueDate="2025-01-12T14:30:00"/>
+            <column name="building_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="2"/>
+            <column name="content" value="One of the most photographed churches in Vilnius."/>
+            <column name="created_at" valueDate="2025-01-20T09:15:00"/>
+            <column name="building_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="3"/>
+            <column name="content" value="Beautiful reflections when the lake is calm."/>
+            <column name="created_at" valueDate="2025-02-01T11:00:00"/>
+            <column name="building_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="4"/>
+            <column name="content" value="Helpful exhibitions that explain Renaissance court life."/>
+            <column name="created_at" valueDate="2025-02-05T12:00:00"/>
+            <column name="building_id" valueNumeric="6"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="5"/>
+            <column name="content" value="A peaceful place — the baroque church and courtyard are stunning."/>
+            <column name="created_at" valueDate="2025-02-10T09:00:00"/>
+            <column name="building_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="6"/>
+            <column name="content" value="Worth combining with a walk around Kaunas Reservoir."/>
+            <column name="created_at" valueDate="2025-02-11T16:40:00"/>
+            <column name="building_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="7"/>
+            <column name="content" value="The interior stucco work is unlike anything else in Vilnius."/>
+            <column name="created_at" valueDate="2025-02-20T11:20:00"/>
+            <column name="building_id" valueNumeric="12"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="8"/>
+            <column name="content" value="The neoclassical portico looks especially impressive at dusk."/>
+            <column name="created_at" valueDate="2025-03-01T10:15:00"/>
+            <column name="building_id" valueNumeric="16"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="9"/>
+            <column name="content" value="Visited the museum gardens — great for photos."/>
+            <column name="created_at" valueDate="2025-03-05T13:10:00"/>
+            <column name="building_id" valueNumeric="21"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="10"/>
+            <column name="content" value="Nice historic theatre facade in Klaipėda old town."/>
+            <column name="created_at" valueDate="2025-03-08T17:25:00"/>
+            <column name="building_id" valueNumeric="22"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="11"/>
+            <column name="content" value="Subtle Art Nouveau details if you look above the ground floor."/>
+            <column name="created_at" valueDate="2025-03-12T10:05:00"/>
+            <column name="building_id" valueNumeric="26"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="12"/>
+            <column name="content" value="Great example of Kaunas interwar modernism."/>
+            <column name="created_at" valueDate="2025-03-15T16:45:00"/>
+            <column name="building_id" valueNumeric="31"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="13"/>
+            <column name="content" value="Still one of the most atmospheric cinemas in Lithuania."/>
+            <column name="created_at" valueDate="2025-03-18T19:00:00"/>
+            <column name="building_id" valueNumeric="32"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="14"/>
+            <column name="content" value="The white volume dominates the hill beautifully."/>
+            <column name="created_at" valueDate="2025-03-20T08:30:00"/>
+            <column name="building_id" valueNumeric="33"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="15"/>
+            <column name="content" value="Raw concrete and huge scale — classic brutalist presence."/>
+            <column name="created_at" valueDate="2025-04-01T08:45:00"/>
+            <column name="building_id" valueNumeric="36"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="16"/>
+            <column name="content" value="Powerful memorial architecture, emotionally heavy visit."/>
+            <column name="created_at" valueDate="2025-04-05T14:00:00"/>
+            <column name="building_id" valueNumeric="38"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="17"/>
+            <column name="content" value="Libeskind's angular design fits the old town surprisingly well."/>
+            <column name="created_at" valueDate="2025-04-10T15:30:00"/>
+            <column name="building_id" valueNumeric="46"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="18"/>
+            <column name="content" value="Excellent temporary exhibitions and cafe."/>
+            <column name="created_at" valueDate="2025-04-12T12:10:00"/>
+            <column name="building_id" valueNumeric="46"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="19"/>
+            <column name="content" value="A new landmark on Nemunas Island."/>
+            <column name="created_at" valueDate="2025-04-20T11:00:00"/>
+            <column name="building_id" valueNumeric="48"/>
+        </insert>
+        <insert tableName="comments">
+            <column name="id" valueNumeric="20"/>
+            <column name="content" value="Clean glass volumes and good riverside views."/>
+            <column name="created_at" valueDate="2025-05-01T09:40:00"/>
+            <column name="building_id" valueNumeric="50"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE architectural_styles AUTO_INCREMENT = 11;
+            ALTER TABLE buildings AUTO_INCREMENT = 51;
+            ALTER TABLE comments AUTO_INCREMENT = 21;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
