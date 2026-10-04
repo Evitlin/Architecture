@@ -6,22 +6,26 @@ namespace ArchitectureCatalog.API.Services.ArchitecturalStyles;
 
 public class ArchitecturalStyleService : IArchitecturalStyleService
 {
-    private readonly IArchitecturalStyleRepository _repository;
+    private readonly IArchitecturalStyleRepository _styleRepository;
+    private readonly IBuildingRepository _buildingRepository;
 
-    public ArchitecturalStyleService(IArchitecturalStyleRepository repository)
+    public ArchitecturalStyleService(
+        IArchitecturalStyleRepository styleRepository,
+        IBuildingRepository buildingRepository)
     {
-        _repository = repository;
+        _styleRepository = styleRepository;
+        _buildingRepository = buildingRepository;
     }
 
     public async Task<IEnumerable<ArchitecturalStyleDto>> GetAllAsync()
     {
-        var styles = await _repository.GetAllAsync();
+        var styles = await _styleRepository.GetAllAsync();
         return styles.Select(MapToDto);
     }
 
     public async Task<ArchitecturalStyleDto?> GetByIdAsync(int id)
     {
-        var style = await _repository.GetByIdAsync(id);
+        var style = await _styleRepository.GetByIdAsync(id);
         return style is null ? null : MapToDto(style);
     }
 
@@ -35,13 +39,13 @@ public class ArchitecturalStyleService : IArchitecturalStyleService
             EndYear = dto.EndYear
         };
 
-        var created = await _repository.CreateAsync(style);
+        var created = await _styleRepository.CreateAsync(style);
         return MapToDto(created);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateArchitecturalStyleDto dto)
     {
-        var existing = await _repository.GetByIdAsync(id);
+        var existing = await _styleRepository.GetByIdAsync(id);
         if (existing is null)
         {
             return false;
@@ -52,12 +56,23 @@ public class ArchitecturalStyleService : IArchitecturalStyleService
         existing.StartYear = dto.StartYear;
         existing.EndYear = dto.EndYear;
 
-        return await _repository.UpdateAsync(existing);
+        return await _styleRepository.UpdateAsync(existing);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        return await _repository.DeleteAsync(id);
+        var existing = await _styleRepository.GetByIdAsync(id);
+        if (existing is null)
+        {
+            return false;
+        }
+
+        if (await _buildingRepository.ExistsByArchitecturalStyleIdAsync(id))
+        {
+            throw new InvalidOperationException("Architectural style has related buildings and cannot be deleted.");
+        }
+
+        return await _styleRepository.DeleteAsync(id);
     }
 
     private static ArchitecturalStyleDto MapToDto(ArchitecturalStyle style)

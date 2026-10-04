@@ -9,4 +9,5 @@ public interface IBuildingRepository
     Task<Building> CreateAsync(Building building);
     Task<bool> UpdateAsync(Building building);
     Task<bool> DeleteAsync(int id);
+    Task<bool> ExistsByArchitecturalStyleIdAsync(int architecturalStyleId);
 }

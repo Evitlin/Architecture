@@ -66,12 +66,19 @@ public class ArchitecturalStylesController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _service.DeleteAsync(id);
-        if (!deleted)
+        try
         {
-            return NotFound();
-        }
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict();
+        }
     }
 }

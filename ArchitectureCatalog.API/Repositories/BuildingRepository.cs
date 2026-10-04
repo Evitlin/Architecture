@@ -100,6 +100,20 @@ public class BuildingRepository : IBuildingRepository
         return rowsAffected > 0;
     }
 
+    public async Task<bool> ExistsByArchitecturalStyleIdAsync(int architecturalStyleId)
+    {
+        const string sql = """
+            SELECT EXISTS(
+                SELECT 1
+                FROM buildings
+                WHERE architectural_style_id = @ArchitecturalStyleId
+            )
+            """;
+
+        await EnsureOpenAsync();
+        return await _connection.ExecuteScalarAsync<bool>(sql, new { ArchitecturalStyleId = architecturalStyleId });
+    }
+
     private async Task EnsureOpenAsync()
     {
         if (_connection.State != System.Data.ConnectionState.Open)

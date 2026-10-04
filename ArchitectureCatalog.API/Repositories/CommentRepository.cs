@@ -86,6 +86,20 @@ public class CommentRepository : ICommentRepository
         return rowsAffected > 0;
     }
 
+    public async Task<bool> ExistsByBuildingIdAsync(int buildingId)
+    {
+        const string sql = """
+            SELECT EXISTS(
+                SELECT 1
+                FROM comments
+                WHERE building_id = @BuildingId
+            )
+            """;
+
+        await EnsureOpenAsync();
+        return await _connection.ExecuteScalarAsync<bool>(sql, new { BuildingId = buildingId });
+    }
+
     private async Task EnsureOpenAsync()
     {
         if (_connection.State != System.Data.ConnectionState.Open)

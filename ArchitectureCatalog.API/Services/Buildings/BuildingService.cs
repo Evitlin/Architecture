@@ -6,27 +6,40 @@ namespace ArchitectureCatalog.API.Services.Buildings;
 
 public class BuildingService : IBuildingService
 {
-    private readonly IBuildingRepository _repository;
+    private readonly IBuildingRepository _buildingRepository;
+    private readonly IArchitecturalStyleRepository _styleRepository;
+    private readonly ICommentRepository _commentRepository;
 
-    public BuildingService(IBuildingRepository repository)
+    public BuildingService(
+        IBuildingRepository buildingRepository,
+        IArchitecturalStyleRepository styleRepository,
+        ICommentRepository commentRepository)
     {
-        _repository = repository;
+        _buildingRepository = buildingRepository;
+        _styleRepository = styleRepository;
+        _commentRepository = commentRepository;
     }
 
     public async Task<IEnumerable<BuildingDto>> GetAllAsync()
     {
-        var buildings = await _repository.GetAllAsync();
+        var buildings = await _buildingRepository.GetAllAsync();
         return buildings.Select(MapToDto);
     }
 
     public async Task<BuildingDto?> GetByIdAsync(int id)
     {
-        var building = await _repository.GetByIdAsync(id);
+        var building = await _buildingRepository.GetByIdAsync(id);
         return building is null ? null : MapToDto(building);
     }
 
-    public async Task<BuildingDto> CreateAsync(CreateBuildingDto dto)
+    public async Task<BuildingDto?> CreateAsync(CreateBuildingDto dto)
     {
+        var style = await _styleRepository.GetByIdAsync(dto.ArchitecturalStyleId);
+        if (style is null)
+        {
+            return null;
+        }
+
         var building = new Building
         {
             Name = dto.Name,
@@ -38,14 +51,20 @@ public class BuildingService : IBuildingService
             ArchitecturalStyleId = dto.ArchitecturalStyleId
         };
 
-        var created = await _repository.CreateAsync(building);
+        var created = await _buildingRepository.CreateAsync(building);
         return MapToDto(created);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateBuildingDto dto)
     {
-        var existing = await _repository.GetByIdAsync(id);
+        var existing = await _buildingRepository.GetByIdAsync(id);
         if (existing is null)
+        {
+            return false;
+        }
+
+        var style = await _styleRepository.GetByIdAsync(dto.ArchitecturalStyleId);
+        if (style is null)
         {
             return false;
         }
@@ -58,12 +77,23 @@ public class BuildingService : IBuildingService
         existing.YearBuilt = dto.YearBuilt;
         existing.ArchitecturalStyleId = dto.ArchitecturalStyleId;
 
-        return await _repository.UpdateAsync(existing);
+        return await _buildingRepository.UpdateAsync(existing);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        return await _repository.DeleteAsync(id);
+        var existing = await _buildingRepository.GetByIdAsync(id);
+        if (existing is null)
+        {
+            return false;
+        }
+
+        if (await _commentRepository.ExistsByBuildingIdAsync(id))
+        {
+            throw new InvalidOperationException("Building has related comments and cannot be deleted.");
+        }
+
+        return await _buildingRepository.DeleteAsync(id);
     }
 
     private static BuildingDto MapToDto(Building building)

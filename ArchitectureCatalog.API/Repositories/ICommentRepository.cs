@@ -9,4 +9,5 @@ public interface ICommentRepository
     Task<Comment> CreateAsync(Comment comment);
     Task<bool> UpdateAsync(Comment comment);
     Task<bool> DeleteAsync(int id);
+    Task<bool> ExistsByBuildingIdAsync(int buildingId);
 }

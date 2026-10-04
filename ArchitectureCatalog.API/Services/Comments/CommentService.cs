@@ -6,27 +6,37 @@ namespace ArchitectureCatalog.API.Services.Comments;
 
 public class CommentService : ICommentService
 {
-    private readonly ICommentRepository _repository;
+    private readonly ICommentRepository _commentRepository;
+    private readonly IBuildingRepository _buildingRepository;
 
-    public CommentService(ICommentRepository repository)
+    public CommentService(
+        ICommentRepository commentRepository,
+        IBuildingRepository buildingRepository)
     {
-        _repository = repository;
+        _commentRepository = commentRepository;
+        _buildingRepository = buildingRepository;
     }
 
     public async Task<IEnumerable<CommentDto>> GetAllAsync()
     {
-        var comments = await _repository.GetAllAsync();
+        var comments = await _commentRepository.GetAllAsync();
         return comments.Select(MapToDto);
     }
 
     public async Task<CommentDto?> GetByIdAsync(int id)
     {
-        var comment = await _repository.GetByIdAsync(id);
+        var comment = await _commentRepository.GetByIdAsync(id);
         return comment is null ? null : MapToDto(comment);
     }
 
-    public async Task<CommentDto> CreateAsync(CreateCommentDto dto)
+    public async Task<CommentDto?> CreateAsync(CreateCommentDto dto)
     {
+        var building = await _buildingRepository.GetByIdAsync(dto.BuildingId);
+        if (building is null)
+        {
+            return null;
+        }
+
         var comment = new Comment
         {
             Content = dto.Content,
@@ -34,13 +44,13 @@ public class CommentService : ICommentService
             CreatedAt = DateTime.UtcNow
         };
 
-        var created = await _repository.CreateAsync(comment);
+        var created = await _commentRepository.CreateAsync(comment);
         return MapToDto(created);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto)
     {
-        var existing = await _repository.GetByIdAsync(id);
+        var existing = await _commentRepository.GetByIdAsync(id);
         if (existing is null)
         {
             return false;
@@ -48,12 +58,12 @@ public class CommentService : ICommentService
 
         existing.Content = dto.Content;
 
-        return await _repository.UpdateAsync(existing);
+        return await _commentRepository.UpdateAsync(existing);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        return await _repository.DeleteAsync(id);
+        return await _commentRepository.DeleteAsync(id);
     }
 
     private static CommentDto MapToDto(Comment comment)
