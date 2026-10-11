@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/comments/{{commentId}}"
+method: DELETE
+order: 6000

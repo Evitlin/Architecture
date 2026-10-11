@@ -1,0 +1,7 @@
+$kind: collection
+description: "Lab 1 demo collection. Start API with: dotnet run (http://localhost:5080)"
+variables:
+  baseUrl: http://localhost:5080
+  styleId: "1"
+  buildingId: "1"
+  commentId: "1"

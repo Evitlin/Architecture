@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/api/comments"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "content": "Nice building",
+      "buildingId": {{buildingId}}
+    }
+order: 4000

@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/api/buildings?city=Vilnius&architecturalStyleId=1&page=1&pageSize=5"
+method: GET
+queryParams:
+  city: Vilnius
+  architecturalStyleId: "1"
+  page: "1"
+  pageSize: "5"
+order: 2000

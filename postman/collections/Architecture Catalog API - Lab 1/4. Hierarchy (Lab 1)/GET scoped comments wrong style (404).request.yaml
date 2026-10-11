@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/architectural-styles/2/buildings/1/comments"
+method: GET
+order: 2000

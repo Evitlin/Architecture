@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/architectural-styles/{{styleId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Demo Style Updated",
+      "description": "Updated from Postman",
+      "startYear": 1900,
+      "endYear": 1960
+    }
+order: 4000

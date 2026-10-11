@@ -1,0 +1,296 @@
+{
+  "info": {
+    "name": "Architecture Catalog API - Lab 1",
+    "description": "Lab 1 demo collection. Start API with: dotnet run (http://localhost:5080)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5080" },
+    { "key": "styleId", "value": "1" },
+    { "key": "buildingId", "value": "1" },
+    { "key": "commentId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "0. Demo flow (~15s)",
+      "item": [
+        {
+          "name": "01 LIST styles (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/architectural-styles?page=1&pageSize=5"
+          }
+        },
+        {
+          "name": "02 LIST buildings filtered (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/buildings?city=Kaunas&architecturalStyleId=7&page=1&pageSize=5"
+          }
+        },
+        {
+          "name": "03 GET building details (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/buildings/{{buildingId}}/details"
+          }
+        },
+        {
+          "name": "04 HIERARCHY style/building/comments (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/architectural-styles/{{styleId}}/buildings/{{buildingId}}/comments"
+          }
+        },
+        {
+          "name": "05 GET missing resource (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/buildings/999999"
+          }
+        },
+        {
+          "name": "06 POST bad payload (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"\",\n  \"buildingId\": 0\n}"
+            },
+            "url": "{{baseUrl}}/api/comments"
+          }
+        },
+        {
+          "name": "07 POST comment (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('commentId', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Postman demo comment\",\n  \"buildingId\": {{buildingId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/comments"
+          }
+        },
+        {
+          "name": "08 DELETE comment (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/comments/{{commentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. ArchitecturalStyles",
+      "item": [
+        {
+          "name": "GET all",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/architectural-styles?page=1&pageSize=10"
+          }
+        },
+        {
+          "name": "GET by id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/architectural-styles/{{styleId}}"
+          }
+        },
+        {
+          "name": "POST create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Style\",\n  \"description\": \"Created from Postman\",\n  \"startYear\": 1900,\n  \"endYear\": 1950\n}"
+            },
+            "url": "{{baseUrl}}/api/architectural-styles"
+          }
+        },
+        {
+          "name": "PUT update",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Style Updated\",\n  \"description\": \"Updated from Postman\",\n  \"startYear\": 1900,\n  \"endYear\": 1960\n}"
+            },
+            "url": "{{baseUrl}}/api/architectural-styles/{{styleId}}"
+          }
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/architectural-styles/{{styleId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Buildings",
+      "item": [
+        {
+          "name": "GET all",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/buildings?page=1&pageSize=10"
+          }
+        },
+        {
+          "name": "GET filtered by city + style",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/buildings?city=Vilnius&architecturalStyleId=1&page=1&pageSize=5"
+          }
+        },
+        {
+          "name": "GET by id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/buildings/{{buildingId}}"
+          }
+        },
+        {
+          "name": "GET details",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/buildings/{{buildingId}}/details"
+          }
+        },
+        {
+          "name": "POST create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Building\",\n  \"address\": \"Demo st. 1\",\n  \"city\": \"Vilnius\",\n  \"description\": \"Created from Postman\",\n  \"architect\": \"Demo Architect\",\n  \"yearBuilt\": 2000,\n  \"architecturalStyleId\": {{styleId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/buildings"
+          }
+        },
+        {
+          "name": "PUT update",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Building Updated\",\n  \"address\": \"Demo st. 1\",\n  \"city\": \"Vilnius\",\n  \"description\": \"Updated from Postman\",\n  \"architect\": \"Demo Architect\",\n  \"yearBuilt\": 2001,\n  \"architecturalStyleId\": {{styleId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/buildings/{{buildingId}}"
+          }
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/buildings/{{buildingId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Comments",
+      "item": [
+        {
+          "name": "GET all",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/comments?page=1&pageSize=10"
+          }
+        },
+        {
+          "name": "GET by buildingId",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/comments?buildingId={{buildingId}}&page=1&pageSize=10"
+          }
+        },
+        {
+          "name": "GET by id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/comments/{{commentId}}"
+          }
+        },
+        {
+          "name": "POST create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Nice building\",\n  \"buildingId\": {{buildingId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/comments"
+          }
+        },
+        {
+          "name": "PUT update",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated comment\"\n}"
+            },
+            "url": "{{baseUrl}}/api/comments/{{commentId}}"
+          }
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/comments/{{commentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Hierarchy (Lab 1)",
+      "item": [
+        {
+          "name": "GET scoped comments (200)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/architectural-styles/{{styleId}}/buildings/{{buildingId}}/comments"
+          }
+        },
+        {
+          "name": "GET scoped comments wrong style (404)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/architectural-styles/2/buildings/1/comments"
+          }
+        }
+      ]
+    }
+  ]
+}

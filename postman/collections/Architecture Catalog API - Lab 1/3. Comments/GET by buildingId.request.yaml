@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/api/comments?buildingId={{buildingId}}&page=1&pageSize=10"
+method: GET
+queryParams:
+  buildingId: "{{buildingId}}"
+  page: "1"
+  pageSize: "10"
+order: 2000

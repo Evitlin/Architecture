@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/architectural-styles?page=1&pageSize=5"
+method: GET
+queryParams:
+  page: "1"
+  pageSize: "5"
+order: 1000

@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/comments"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "content": "Postman demo comment",
+      "buildingId": {{buildingId}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 201) {
+        const json = pm.response.json();
+        pm.collectionVariables.set('commentId', json.id);
+      }
+    language: text/javascript
+order: 7000

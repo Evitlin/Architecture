@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/api/buildings"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Demo Building",
+      "address": "Demo st. 1",
+      "city": "Vilnius",
+      "description": "Created from Postman",
+      "architect": "Demo Architect",
+      "yearBuilt": 2000,
+      "architecturalStyleId": {{styleId}}
+    }
+order: 5000

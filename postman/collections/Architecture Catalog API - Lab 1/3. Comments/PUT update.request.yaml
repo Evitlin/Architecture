@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/comments/{{commentId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "content": "Updated comment"
+    }
+order: 5000

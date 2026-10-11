@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/architectural-styles"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Demo Style",
+      "description": "Created from Postman",
+      "startYear": 1900,
+      "endYear": 1950
+    }
+order: 3000

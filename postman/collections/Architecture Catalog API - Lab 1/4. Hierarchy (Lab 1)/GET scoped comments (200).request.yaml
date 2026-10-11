@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/architectural-styles/{{styleId}}/buildings/{{buildingId}}/comments"
+method: GET
+order: 1000

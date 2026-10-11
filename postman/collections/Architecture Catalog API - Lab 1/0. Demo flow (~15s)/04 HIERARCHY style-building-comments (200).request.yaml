@@ -1,0 +1,5 @@
+$kind: http-request
+name: 04 HIERARCHY style/building/comments (200)
+url: "{{baseUrl}}/api/architectural-styles/{{styleId}}/buildings/{{buildingId}}/comments"
+method: GET
+order: 4000
