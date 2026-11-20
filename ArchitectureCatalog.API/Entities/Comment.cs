@@ -11,5 +11,7 @@ namespace ArchitectureCatalog.API.Entities
         public int BuildingId { get; set; }
 
         public Building Building { get; set; } = null!;
+
+        public int UserId { get; set; }
     }
 }

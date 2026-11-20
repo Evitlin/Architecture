@@ -7,5 +7,6 @@
 
     <include file="changes/001-create-tables.xml" relativeToChangelogFile="true"/>
     <include file="changes/002-seed-data.xml" relativeToChangelogFile="true"/>
-
+    <include file="changes/003-create-users.xml" relativeToChangelogFile="true"/>
+    <include file="changes/004-fk-comments-user.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

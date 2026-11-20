@@ -10,15 +10,18 @@ public class CommentService : ICommentService
     private readonly ICommentRepository _commentRepository;
     private readonly IBuildingRepository _buildingRepository;
     private readonly IArchitecturalStyleRepository _styleRepository;
+    private readonly IUserRepository _userRepository;
 
     public CommentService(
         ICommentRepository commentRepository,
         IBuildingRepository buildingRepository,
-        IArchitecturalStyleRepository styleRepository)
+        IArchitecturalStyleRepository styleRepository,
+        IUserRepository userRepository)
     {
         _commentRepository = commentRepository;
         _buildingRepository = buildingRepository;
         _styleRepository = styleRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<PagedResult<CommentDto>> GetAllAsync(int page, int pageSize, int? buildingId)
@@ -63,10 +66,17 @@ public class CommentService : ICommentService
             return null;
         }
 
+        var user = await _userRepository.GetByIdAsync(dto.UserId);
+        if (user is null)
+        {
+            return null;
+        }
+
         var comment = new Comment
         {
             Content = dto.Content,
             BuildingId = dto.BuildingId,
+            UserId = dto.UserId,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -99,7 +109,8 @@ public class CommentService : ICommentService
             Id = comment.Id,
             Content = comment.Content,
             CreatedAt = comment.CreatedAt,
-            BuildingId = comment.BuildingId
+            BuildingId = comment.BuildingId,
+            UserId = comment.UserId
         };
     }
 }

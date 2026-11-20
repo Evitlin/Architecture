@@ -79,7 +79,8 @@ public class BuildingService : IBuildingService
                 Id = comment.Id,
                 Content = comment.Content,
                 CreatedAt = comment.CreatedAt,
-                BuildingId = comment.BuildingId
+                BuildingId = comment.BuildingId,
+                UserId = comment.UserId
             }).ToList()
         };
     }

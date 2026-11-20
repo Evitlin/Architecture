@@ -14,6 +14,7 @@ builder.Services.AddScoped<MySqlConnection>(_ =>
 builder.Services.AddScoped<IArchitecturalStyleRepository, ArchitecturalStyleRepository>();
 builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IArchitecturalStyleService, ArchitecturalStyleService>();
 builder.Services.AddScoped<IBuildingService, BuildingService>();

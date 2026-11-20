@@ -34,7 +34,8 @@ public class CommentRepository : ICommentRepository
                 id AS Id,
                 content AS Content,
                 created_at AS CreatedAt,
-                building_id AS BuildingId
+                building_id AS BuildingId,
+                user_id AS UserId
             FROM comments
             {where}
             ORDER BY id
@@ -59,7 +60,8 @@ public class CommentRepository : ICommentRepository
                 id AS Id,
                 content AS Content,
                 created_at AS CreatedAt,
-                building_id AS BuildingId
+                building_id AS BuildingId,
+                user_id AS UserId
             FROM comments
             WHERE building_id = @BuildingId
             ORDER BY id
@@ -77,7 +79,8 @@ public class CommentRepository : ICommentRepository
                 id AS Id,
                 content AS Content,
                 created_at AS CreatedAt,
-                building_id AS BuildingId
+                building_id AS BuildingId,
+                user_id AS UserId
             FROM comments
             WHERE id = @Id
             """;
@@ -89,8 +92,8 @@ public class CommentRepository : ICommentRepository
     public async Task<Comment> CreateAsync(Comment comment)
     {
         const string sql = """
-            INSERT INTO comments (content, created_at, building_id)
-            VALUES (@Content, @CreatedAt, @BuildingId);
+            INSERT INTO comments (content, created_at, building_id, user_id)
+            VALUES (@Content, @CreatedAt, @BuildingId, @UserId);
             SELECT LAST_INSERT_ID();
             """;
 
@@ -107,7 +110,8 @@ public class CommentRepository : ICommentRepository
             SET
                 content = @Content,
                 created_at = @CreatedAt,
-                building_id = @BuildingId
+                building_id = @BuildingId,
+                user_id = @UserId
             WHERE id = @Id
             """;
 
