@@ -10,7 +10,4 @@ public class CreateCommentDto
 
     [Range(1, int.MaxValue)]
     public int BuildingId { get; set; }
-
-    [Range(1, int.MaxValue)]
-    public int UserId { get; set; }
 }

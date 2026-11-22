@@ -1,7 +1,9 @@
+using ArchitectureCatalog.API.Auth;
 using ArchitectureCatalog.API.DTOs.ArchitecturalStyles;
 using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.ArchitecturalStyles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectureCatalog.API.Controllers;
@@ -17,6 +19,7 @@ public class ArchitecturalStylesController : ControllerBase
         _service = service;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<PagedResult<ArchitecturalStyleDto>>> GetAll(
         [FromQuery] int page = 1,
@@ -40,6 +43,7 @@ public class ArchitecturalStylesController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ArchitecturalStyleDto>> GetById(int id)
     {
@@ -53,6 +57,7 @@ public class ArchitecturalStylesController : ControllerBase
         return Ok(style);
     }
 
+    [Authorize(Roles = Roles.Administrator)]
     [HttpPost]
     public async Task<ActionResult<ArchitecturalStyleDto>> Create([FromBody] CreateArchitecturalStyleDto dto)
     {
@@ -66,6 +71,7 @@ public class ArchitecturalStylesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    [Authorize(Roles = Roles.Administrator)]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateArchitecturalStyleDto dto)
     {
@@ -83,6 +89,7 @@ public class ArchitecturalStylesController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = Roles.Administrator)]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

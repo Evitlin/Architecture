@@ -1,7 +1,10 @@
+using System.Security.Claims;
+using ArchitectureCatalog.API.Auth;
 using ArchitectureCatalog.API.DTOs.Comments;
 using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.Comments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectureCatalog.API.Controllers;
@@ -17,6 +20,7 @@ public class CommentsController : ControllerBase
         _service = service;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<PagedResult<CommentDto>>> GetAll(
         [FromQuery] int page = 1,
@@ -42,6 +46,7 @@ public class CommentsController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<CommentDto>> GetById(int id)
     {
@@ -55,6 +60,7 @@ public class CommentsController : ControllerBase
         return Ok(comment);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CommentDto>> Create([FromBody] CreateCommentDto dto)
     {
@@ -63,7 +69,12 @@ public class CommentsController : ControllerBase
             return BadRequest();
         }
 
-        var created = await _service.CreateAsync(dto);
+        if (!TryGetUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var created = await _service.CreateAsync(dto, userId);
         if (created is null)
         {
             return NotFound();
@@ -73,6 +84,7 @@ public class CommentsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    [Authorize]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateCommentDto dto)
     {
@@ -81,24 +93,55 @@ public class CommentsController : ControllerBase
             return BadRequest();
         }
 
-        var updated = await _service.UpdateAsync(id, dto);
-        if (!updated)
+        if (!TryGetUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return NoContent();
+        try
+        {
+            var updated = await _service.UpdateAsync(id, dto, userId, User.IsInRole(Roles.Administrator));
+            if (!updated)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
     }
 
+    [Authorize]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await _service.DeleteAsync(id);
-        if (!deleted)
+        if (!TryGetUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return NoContent();
+        try
+        {
+            var deleted = await _service.DeleteAsync(id, userId, User.IsInRole(Roles.Administrator));
+            if (!deleted)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    private bool TryGetUserId(out int userId)
+    {
+        var value = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return int.TryParse(value, out userId);
     }
 }

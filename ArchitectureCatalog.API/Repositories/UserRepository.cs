@@ -29,6 +29,35 @@ public class UserRepository : IUserRepository
         return await _connection.QuerySingleOrDefaultAsync<User>(sql, new { Id = id });
     }
 
+    public async Task<User?> GetByUsernameAsync(string username)
+    {
+        const string sql = """
+            SELECT
+                id AS Id,
+                username AS Username,
+                password_hash AS PasswordHash,
+                role AS Role
+            FROM users
+            WHERE username = @Username
+            """;
+
+        await EnsureOpenAsync();
+        return await _connection.QuerySingleOrDefaultAsync<User>(sql, new { Username = username });
+    }
+
+    public async Task<User> CreateAsync(User user)
+    {
+        const string sql = """
+            INSERT INTO users (username, password_hash, role)
+            VALUES (@Username, @PasswordHash, @Role);
+            SELECT LAST_INSERT_ID();
+            """;
+
+        await EnsureOpenAsync();
+        user.Id = await _connection.ExecuteScalarAsync<int>(sql, user);
+        return user;
+    }
+
     private async Task EnsureOpenAsync()
     {
         if (_connection.State != System.Data.ConnectionState.Open)

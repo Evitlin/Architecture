@@ -2,6 +2,7 @@ using ArchitectureCatalog.API.DTOs.Comments;
 using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.Comments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectureCatalog.API.Controllers;
@@ -17,6 +18,7 @@ public class StyleBuildingCommentsController : ControllerBase
         _service = service;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<CommentDto>>> GetAll(int styleId, int buildingId)
     {

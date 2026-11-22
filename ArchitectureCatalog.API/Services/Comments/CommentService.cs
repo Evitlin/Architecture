@@ -58,7 +58,7 @@ public class CommentService : ICommentService
         return comment is null ? null : MapToDto(comment);
     }
 
-    public async Task<CommentDto?> CreateAsync(CreateCommentDto dto)
+    public async Task<CommentDto?> CreateAsync(CreateCommentDto dto, int userId)
     {
         var building = await _buildingRepository.GetByIdAsync(dto.BuildingId);
         if (building is null)
@@ -66,7 +66,7 @@ public class CommentService : ICommentService
             return null;
         }
 
-        var user = await _userRepository.GetByIdAsync(dto.UserId);
+        var user = await _userRepository.GetByIdAsync(userId);
         if (user is null)
         {
             return null;
@@ -76,7 +76,7 @@ public class CommentService : ICommentService
         {
             Content = dto.Content,
             BuildingId = dto.BuildingId,
-            UserId = dto.UserId,
+            UserId = userId,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -84,7 +84,7 @@ public class CommentService : ICommentService
         return MapToDto(created);
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto)
+    public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto, int userId, bool isAdmin)
     {
         var existing = await _commentRepository.GetByIdAsync(id);
         if (existing is null)
@@ -92,13 +92,29 @@ public class CommentService : ICommentService
             return false;
         }
 
+        if (!isAdmin && existing.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You can only update your own comments.");
+        }
+
         existing.Content = dto.Content;
 
         return await _commentRepository.UpdateAsync(existing);
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id, int userId, bool isAdmin)
     {
+        var existing = await _commentRepository.GetByIdAsync(id);
+        if (existing is null)
+        {
+            return false;
+        }
+
+        if (!isAdmin && existing.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You can only delete your own comments.");
+        }
+
         return await _commentRepository.DeleteAsync(id);
     }
 

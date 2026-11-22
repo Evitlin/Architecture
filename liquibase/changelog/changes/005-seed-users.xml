@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Passwords: admin / Admin123!  and  user1 / User123!  (BCrypt) -->
+    <changeSet id="005-seed-users" author="evigai">
+        <sql>
+            INSERT INTO users (username, password_hash, role)
+            SELECT 'admin', '$2a$11$HJUnkY6UMEa3ei79TwAuV..ozltIyzI4HP3CuL3lV6XefvDMmUPau', 'Administrator'
+            WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
+
+            INSERT INTO users (username, password_hash, role)
+            SELECT 'user1', '$2a$11$6i8YvfF3OxN4OXHloJ8kJeAAEElw1SZ9HL6IfKP7s.rXB5br1WG.W', 'User'
+            WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'user1');
+
+            UPDATE users
+            SET password_hash = '$2a$11$HJUnkY6UMEa3ei79TwAuV..ozltIyzI4HP3CuL3lV6XefvDMmUPau',
+                role = 'Administrator'
+            WHERE username = 'admin';
+
+            UPDATE users
+            SET password_hash = '$2a$11$6i8YvfF3OxN4OXHloJ8kJeAAEElw1SZ9HL6IfKP7s.rXB5br1WG.W',
+                role = 'User'
+            WHERE username = 'user1';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

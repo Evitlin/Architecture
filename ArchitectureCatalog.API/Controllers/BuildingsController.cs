@@ -1,7 +1,9 @@
+using ArchitectureCatalog.API.Auth;
 using ArchitectureCatalog.API.DTOs.Buildings;
 using ArchitectureCatalog.API.DTOs.Common;
 using ArchitectureCatalog.API.Hateoas;
 using ArchitectureCatalog.API.Services.Buildings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectureCatalog.API.Controllers;
@@ -17,6 +19,7 @@ public class BuildingsController : ControllerBase
         _service = service;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<PagedResult<BuildingDto>>> GetAll(
         [FromQuery] int page = 1,
@@ -43,6 +46,7 @@ public class BuildingsController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<BuildingDto>> GetById(int id)
     {
@@ -56,6 +60,7 @@ public class BuildingsController : ControllerBase
         return Ok(building);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}/details")]
     public async Task<ActionResult<BuildingDetailsDto>> GetDetails(int id)
     {
@@ -86,6 +91,7 @@ public class BuildingsController : ControllerBase
         return Ok(details);
     }
 
+    [Authorize(Roles = Roles.Administrator)]
     [HttpPost]
     public async Task<ActionResult<BuildingDto>> Create([FromBody] CreateBuildingDto dto)
     {
@@ -104,6 +110,7 @@ public class BuildingsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    [Authorize(Roles = Roles.Administrator)]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateBuildingDto dto)
     {
@@ -121,6 +128,7 @@ public class BuildingsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = Roles.Administrator)]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
